@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  dateordered: 2025-02-11 13:50:40
+  completed: false
+  order_employee: one
+  delivery_employee: one
+
+two:
+  dateordered: 2025-02-11 13:50:40
+  completed: false
+  order_employee: two
+  delivery_employee: two

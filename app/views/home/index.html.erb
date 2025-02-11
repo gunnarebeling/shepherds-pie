@@ -1,30 +1,47 @@
+    <div>
         <header class="bg-red-600 text-white p-4">
-            <h1 class="text-3xl font-bold">Welcome to Our Pizza Shop</h1>
+            <h1 class="text-3xl font-bold">Orders</h1>
         </header>
-
-        <div class="container mx-auto p-4">
-            <section class="text-center">
-                <h2 class="text-2xl font-semibold mb-4">Delicious Pizzas Made Fresh Daily</h2>
-                <p class="mb-6">Come and enjoy our wide variety of pizzas, made with the freshest ingredients.</p>
-                <a href="#" class="bg-red-600 text-white py-2 px-4 rounded">Order Now</a>
-            </section>
-            <section class="mt-12">
-                <h3 class="text-xl font-semibold mb-4">Our Specialties</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="bg-white p-4 rounded shadow">
-                        <h4 class="text-lg font-semibold mb-2">Margherita</h4>
-                        <p>Classic pizza with tomato sauce, mozzarella, and fresh basil.</p>
-                    </div>
-                    <div class="bg-white p-4 rounded shadow">
-                        <h4 class="text-lg font-semibold mb-2">Pepperoni</h4>
-                        <p>Loaded with pepperoni slices and mozzarella cheese.</p>
-                    </div>
-                    <div class="bg-white p-4 rounded shadow">
-                        <h4 class="text-lg font-semibold mb-2">Veggie</h4>
-                        <p>A mix of fresh vegetables, mozzarella, and tomato sauce.</p>
+        <div>
+            <%= form_with url: home_index_path, method: :get do %>
+                <div class="container mt-4">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <%= label_tag :start_date, "Start Date" %>
+                            <%= text_field_tag :start_date, params[:start_date], class: "form-control" %>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <%= submit_tag "Filter", class: "btn btn-primary mt-4" %>
+                        </div>
                     </div>
                 </div>
-            </section>
+            <% end %>
+        </div>
+       <div class="container mt-4">
+            <table class="table table-striped">
+            <thead>
+                <tr>
+                <th scope="col">Order Date</th>
+                <th scope="col">Total Price</th>
+                <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% @orders.each do |order| %>
+                <tr>
+                    <td><%= order.dateordered %></td>
+                    <td><%= number_to_currency(order.price_total) %></td>
+                    <td>
+                    <a href="/orders/<%= order.id %>" class="btn btn-primary">View Order</a>
+                    </td>
+                </tr>
+                <% end %>
+            </tbody>
+            </table>
+        </div>
+        
+           
     </div>
 
 
