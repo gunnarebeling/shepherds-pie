@@ -56,8 +56,23 @@ group :development do
   gem "web-console"
 end
 
+gem "dotenv-rails", groups: [ :development, :test ]
+
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+
+# filepath: Gemfile
+gem "devise"
+
+
+
+
+gem "pg", "~> 1.5"
+
+gem "tailwindcss-rails", "~> 3.3.1"
+
+gem "tailwindcss-ruby", "~> 3.4"
