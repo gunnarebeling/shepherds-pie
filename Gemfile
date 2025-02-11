@@ -73,6 +73,6 @@ gem "devise"
 
 gem "pg", "~> 1.5"
 
-gem "tailwindcss-rails", "~> 3.3.1"
+gem "tailwindcss-rails", "~> 4.0.0"
 
-gem "tailwindcss-ruby", "~> 3.4"
+gem "tailwindcss-ruby", "~> 4.0"
