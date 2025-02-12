@@ -1,0 +1,129 @@
+<div class="container mt-5">
+    <h1>Create a New Order</h1>
+    <%= form_with(model: @order, local: true, html: { class: 'needs-validation', novalidate: true }) do |form| %>
+        <div class="form-group">
+            <%= form.label :delivery_employee_id, "Delivery Employee", class: "form-label" %>
+            <%= form.collection_select :delivery_employee_id, Employee.all, :id, :name, { include_blank: true }, { class: "form-control" } %>
+        </div>
+
+        <h2>Pizzas</h2>
+        <div id="pizzas" >
+            <%= form.fields_for :pizzas do |pizza_form| %>
+                <div class="pizza-fields">
+                    <%= render 'pizza_fields', f: pizza_form %>
+                </div>
+            <% end %>
+            <div class="form-group mt-3">
+                <%= link_to 'Add Pizza', '#', id: 'add_pizza', class: 'btn btn-secondary' %>
+            </div>
+        </div>
+
+        <div class="form-group mt-3 text-center">
+            <%= form.submit 'Create Order', class: 'btn btn-primary' %>
+        </div>
+    <% end %>
+</div>
+
+<!-- Modal for adding a pizza -->
+<div class="modal fade" id="pizzaModal" tabindex="-1" role="dialog" aria-labelledby="pizzaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pizzaModalLabel">Add Pizza</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="pizza_form" class="needs-validation" novalidate>
+                    <div class="form-group">
+                        <label for="pizza_size_id" class="form-label">Size</label>
+                        <select id="pizza_size_id" name="size_id" class="form-control" required>
+                            <% Size.all.each do |size| %>
+                                <option value="<%= size.id %>"><%= size.size %></option>
+                            <% end %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pizza_cheese_id" class="form-label">Cheese</label>
+                        <select id="pizza_cheese_id" name="cheese_id" class="form-control" required>
+                            <% Cheese.all.each do |cheese| %>
+                                <option value="<%= cheese.id %>"><%= cheese.name %></option>
+                            <% end %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pizza_sauce_id" class="form-label">Sauce</label>
+                        <select id="pizza_sauce_id" name="sauce_id" class="form-control" required>
+                            <% Sauce.all.each do |sauce| %>
+                                <option value="<%= sauce.id %>"><%= sauce.name %></option>
+                            <% end %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pizza_topping_ids" class="form-label">Toppings</label>
+                            <% Topping.all.each do |topping| %>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="topping_<%= topping.id %>" name="topping_ids[]" value="<%= topping.id %>">
+                                    <label class="form-check-label" for="topping_<%= topping.id %>"><%= topping.name %></label>
+                                </div>
+                            <% end %>
+                        
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="save_pizza">Save Pizza</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var addPizzaButton = document.getElementById("add_pizza");
+        var pizzaModal = new bootstrap.Modal(document.getElementById("pizzaModal"));
+        var savePizzaButton = document.getElementById("save_pizza");
+
+        addPizzaButton.addEventListener("click", function(event) {
+            event.preventDefault();
+            pizzaModal.show();
+        });
+
+        savePizzaButton.addEventListener("click", function() {
+            var pizzaForm = document.getElementById("pizza_form");
+            var formData = new FormData(pizzaForm);
+            var pizzaFields = document.createElement("div");
+            pizzaFields.classList.add("pizza-fields");
+
+            formData.forEach(function(value, key) {
+                var input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "order[pizzas_attributes][][" + key + "]";
+                input.value = value;
+                pizzaFields.appendChild(input);
+            });
+            var toppingIds = Array.from(document.querySelectorAll('#pizza_form .form-check-input:checked')).map(el => el.value);
+            toppingIds.forEach(function(toppingId) {
+                var input = document.createElement("input");
+                input.type = "hidden";
+                input.name = "order[pizzas_attributes][][topping_ids][]";
+                input.value = toppingId;
+                pizzaFields.appendChild(input);
+            });
+            var pizzaTemplate = `
+                <div class="pizza-template container border p-3 my-3">
+                    <p>Size: ${document.querySelector('#pizza_size_id option:checked').textContent}</p>
+                    <p>Cheese: ${document.querySelector('#pizza_cheese_id option:checked').textContent}</p>
+                    <p>Sauce: ${document.querySelector('#pizza_sauce_id option:checked').textContent}</p>
+                    <p>Toppings: ${Array.from(document.querySelectorAll('#pizza_form input:checked')).map(el => el.nextElementSibling.textContent).join(', ')}</p>
+                </div>
+            `;
+            pizzaFields.innerHTML += pizzaTemplate;
+
+            document.getElementById("pizzas").appendChild(pizzaFields);
+            pizzaModal.hide();
+        });
+    });
+</script>
