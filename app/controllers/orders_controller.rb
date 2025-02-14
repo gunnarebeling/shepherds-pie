@@ -7,6 +7,9 @@ class OrdersController < ApplicationController
   def new
     @order = Order.new
   end
+  def show
+    @order = Order.find(params[:id])
+  end
 
   def edit
   end
@@ -16,7 +19,7 @@ class OrdersController < ApplicationController
     @order.order_employee = current_employee
     @order.completed = false
     @order.dateordered = Time.now
-    binding.break
+
     if @order.save
       redirect_to root_path, notice: "Order was successfully created."
     else
