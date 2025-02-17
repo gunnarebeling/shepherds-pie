@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :employees
-
+  resources :pizzas, only: [ :update ]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   root "home#index"
 
@@ -9,6 +9,10 @@ Rails.application.routes.draw do
   get "orders/new", to: "orders#new", as: :new_order
   post "orders", to: "orders#create"
   get "orders/:id", to: "orders#show", as: :order
+
+
+
+  get "orders/:id/edit", to: "orders#edit", as: :edit_order
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

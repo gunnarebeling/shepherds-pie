@@ -1,4 +1,4 @@
-<div data-controller="format">
+<div data-controller="format addpizza">
     <header class="p-4">
         <h1 class="text-3xl font-bold">Order Details</h1>
         <h4 data-utc-time="<%= @order.dateordered %>" class="text-xl font-bold"></h4>
@@ -45,10 +45,15 @@
                                 <% end %>
                             </ul>
                         </td>
+                        <td>
+                            <button class="btn btn-warning" data-action="addpizza#editPizza" data-pizza="<%= pizza.to_json %>">Edit</button>
+                            <button class="btn btn-danger" data-action="click->format#deletePizza" data-id="<%= pizza.id %>">Delete</button>
+                        </td>
                     </tr>
                 <% end %>
             </tbody>
         </table>
+        <%= render 'shared/pizza_modal' %>
     </div>
 
 </div>

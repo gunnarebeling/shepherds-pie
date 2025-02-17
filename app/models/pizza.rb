@@ -12,4 +12,8 @@ class Pizza < ApplicationRecord
     toppings_price = self.toppings.count * 0.50
     base_price + toppings_price
   end
+
+  def as_json(options = {})
+    super(options.merge(include: { toppings: { only: [ :id, :name ] } }))
+  end
 end

@@ -68,6 +68,8 @@ end
 # filepath: Gemfile
 gem "devise"
 
+gem "pry"
+
 
 
 

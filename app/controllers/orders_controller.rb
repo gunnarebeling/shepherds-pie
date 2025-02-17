@@ -12,6 +12,7 @@ class OrdersController < ApplicationController
   end
 
   def edit
+    @order = Order.find(params[:id])
   end
 
   def create
@@ -31,7 +32,7 @@ class OrdersController < ApplicationController
     if @order.update(order_params)
       redirect_to @order, notice: "Order was successfully updated."
     else
-      render :edit
+      render :show
     end
   end
 

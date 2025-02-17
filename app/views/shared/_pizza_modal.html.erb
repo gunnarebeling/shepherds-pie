@@ -9,9 +9,10 @@
             </div>
             <div class="modal-body">
                 <form id="pizza_form" class="needs-validation" data-addpizza-target="pizzaForm" novalidate>
+                    <input type="hidden" id="pizza_id" name="id" data-addpizza-target="pizzaId">
                     <div class="form-group">
                         <label for="pizza_size_id" class="form-label">Size</label>
-                        <select id="pizza_size_id" name="size_id" class="form-control" required>
+                        <select id="pizza_size_id" name="size_id" class="form-control" required data-addpizza-target="pizzaSize">
                             <% Size.all.each do |size| %>
                                 <option value="<%= size.id %>"><%= size.size %></option>
                             <% end %>
@@ -19,7 +20,7 @@
                     </div>
                     <div class="form-group">
                         <label for="pizza_cheese_id" class="form-label">Cheese</label>
-                        <select id="pizza_cheese_id" name="cheese_id" class="form-control" required>
+                        <select id="pizza_cheese_id" name="cheese_id" class="form-control" required data-addpizza-target="pizzaCheese">
                             <% Cheese.all.each do |cheese| %>
                                 <option value="<%= cheese.id %>"><%= cheese.name %></option>
                             <% end %>
@@ -27,7 +28,7 @@
                     </div>
                     <div class="form-group">
                         <label for="pizza_sauce_id" class="form-label">Sauce</label>
-                        <select id="pizza_sauce_id" name="sauce_id" class="form-control" required>
+                        <select id="pizza_sauce_id" name="sauce_id" class="form-control" required data-addpizza-target="pizzaSauce">
                             <% Sauce.all.each do |sauce| %>
                                 <option value="<%= sauce.id %>"><%= sauce.name %></option>
                             <% end %>
@@ -37,7 +38,7 @@
                         <label for="pizza_topping_ids" class="form-label">Toppings</label>
                             <% Topping.all.each do |topping| %>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="topping_<%= topping.id %>" name="topping_ids[]" value="<%= topping.id %>">
+                                    <input class="form-check-input" type="checkbox" id="topping_<%= topping.id %>" name="topping_ids[]" value="<%= topping.id %>" data-addpizza-target="pizzaToppings">
                                     <label class="form-check-label" for="topping_<%= topping.id %>"><%= topping.name %></label>
                                 </div>
                             <% end %>
