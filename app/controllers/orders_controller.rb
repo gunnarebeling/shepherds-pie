@@ -29,16 +29,19 @@ class OrdersController < ApplicationController
   end
 
   def update
+    @order = Order.find(params[:id])
     if @order.update(order_params)
-      redirect_to @order, notice: "Order was successfully updated."
+      redirect_to @order, notice: "Order updated successfully."
     else
-      render :show
+      render :edit, status: :unprocessable_entity
     end
   end
 
+
   def destroy
+    @order = Order.find(params[:id])
     @order.destroy
-    redirect_to orders_url, notice: "Order was successfully destroyed."
+    redirect_to root_path, notice: "Order was successfully destroyed."
   end
 
   private

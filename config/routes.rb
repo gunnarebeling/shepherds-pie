@@ -10,9 +10,11 @@ Rails.application.routes.draw do
   post "orders", to: "orders#create"
   get "orders/:id", to: "orders#show", as: :order
 
+  delete "pizzas/:id", to: "pizzas#destroy", as: :destroy_pizza
 
+  delete "orders/:id", to: "orders#destroy", as: :destroy_order
 
-  get "orders/:id/edit", to: "orders#edit", as: :edit_order
+  patch "orders/:id", to: "orders#update", as: :edit_order
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

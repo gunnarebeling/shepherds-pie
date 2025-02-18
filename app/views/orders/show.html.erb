@@ -1,7 +1,13 @@
-<div data-controller="format addpizza">
-    <header class="p-4">
-        <h1 class="text-3xl font-bold">Order Details</h1>
-        <h4 data-utc-time="<%= @order.dateordered %>" class="text-xl font-bold"></h4>
+<div data-controller="format addpizza orders">
+    <header class="p-4 d-flex ">
+        <div>
+            <h1 class="text-3xl font-bold">Order Details</h1>
+            <h4 data-utc-time="<%= @order.dateordered %>" class="text-xl font-bold"></h4>
+        </div>
+        <div class="ms-3">
+            <button class="btn btn-primary mb-2 " data-action="orders#showOrderModal" data-order="<%= @order.to_json %>">Edit</button>
+            <%= button_to 'Delete', destroy_order_path(@order), method: :delete, data: {confirm: "are you sure?"}, class: "btn btn-danger" %>
+        </div>
     </header>
     <div class="ms-4 mt-4">
         <table class="table w-50 ">
@@ -45,15 +51,16 @@
                                 <% end %>
                             </ul>
                         </td>
-                        <td>
-                            <button class="btn btn-warning" data-action="addpizza#editPizza" data-pizza="<%= pizza.to_json %>">Edit</button>
-                            <button class="btn btn-danger" data-action="click->format#deletePizza" data-id="<%= pizza.id %>">Delete</button>
+                        <td >
+                            <button class="btn btn-warning me-2 mb-2" data-action="addpizza#editPizza" data-pizza="<%= pizza.to_json %>">Edit</button>
+                            <%= button_to 'Delete', destroy_pizza_path(pizza.id), method: :delete, data: {confirm: "are you sure?"}, class: "btn btn-danger" %>
                         </td>
                     </tr>
                 <% end %>
             </tbody>
         </table>
         <%= render 'shared/pizza_modal' %>
+        <%= render 'shared/edit_order_modal' %>
     </div>
 
 </div>
