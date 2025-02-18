@@ -4,17 +4,26 @@ class PizzasController < ApplicationController
   def update
     @pizza = Pizza.find(params[:id])
     order = @pizza.order_id
-    binding.pry
     if @pizza.update(pizza_params)
       respond_to do |format|
         format.json { render json: { redirect_url: order_path(order) }, status: :ok }
-        format.html { redirect_to order_path(@pizza.order), notice: "Pizza was successfully updated." }
+        format.html { redirect_to order_path(order), notice: "Pizza was successfully updated." }
       end
     else
       respond_to do |format|
         format.json { render json: @pizza.errors, status: :unprocessable_entity }
         format.html { render :edit }
       end
+    end
+  end
+
+  def destroy
+    @pizza = Pizza.find(params[:id])
+    order = @pizza.order_id
+    @pizza.destroy
+    respond_to do |format|
+      format.json { head :no_content }
+      format.html { redirect_to order_path(order), notice: "Pizza was successfully destroyed." }
     end
   end
 

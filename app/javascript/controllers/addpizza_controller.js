@@ -21,7 +21,7 @@ export default class extends Controller {
     this.pizzaModal.show()
   }
 
-  savePizza() {
+  async savePizza() {
     const formData = new FormData(this.pizzaFormTarget)
     const pizzaId = this.pizzaIdTarget.value
     let pizzaFields
@@ -32,7 +32,7 @@ export default class extends Controller {
       const url = `/pizzas/${pizzaId}`
       let pizzaObj = Object.fromEntries(formData)
       pizzaObj.topping_ids = Array.from(this.pizzaFormTarget.querySelectorAll(".form-check-input:checked")).map(el => el.value)
-      const response =  fetch(url, {
+      const response = await fetch(url, {
         method: 'PUT',
         headers: {
           'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -40,16 +40,17 @@ export default class extends Controller {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ pizza: pizzaObj })
-      }).then(response => {
+      })
   
       if (response.ok) {
-        const updatedPizza =  response.json()
-        console.log('Pizza updated successfully:', updatedPizza)
+        const updatedPizza = await response.json()
+        console.log(updatedPizza);
+        
         window.location.href = updatedPizza.redirect_url
       } else {
         console.error('Failed to update pizza:', response.statusText)
       }
-    })
+    
      
     } else {
       // Create new pizza
