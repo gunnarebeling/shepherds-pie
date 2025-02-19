@@ -45,6 +45,10 @@ Rails.application.configure do
 
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
+  Rails.application.configure do
+    # Allow requests from your Elastic Beanstalk domain
+    config.hosts << "shepherds-pie-env.eba-r6yd8dyp.us-east-1.elasticbeanstalk.com"
+  end
 
   # Replace the default in-process memory cache store with a durable alternative.
   config.cache_store = :solid_cache_store
@@ -80,13 +84,14 @@ Rails.application.configure do
   config.active_record.attributes_for_inspect = [ :id ]
 
   config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  # config/environments/production.rb
 
   # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
-  #
+  config.hosts = [
+    "shepherds-pie-env.eba-r6yd8dyp.us-east-1.elasticbeanstalk.com",     # Allow requests from example.com
+    /.*\.shepherds-pie-env.eba-r6yd8dyp.us-east-1.elasticbeanstalk.com\.com/ # Allow requests from subdomains like `www.example.com`
+  ]
+
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end

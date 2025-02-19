@@ -8,14 +8,14 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: <%= ENV.fetch("PG_USERNAME") { 'your_postgres_username' } %>
-  password: <%= ENV.fetch("PG_PASSWORD") { 'your_postgres_password' } %>
-  host: <%= ENV.fetch("PG_HOST") { 'localhost' } %>
+  username: <%= ENV.fetch("PG_USERNAME") { 'postgres' } %>
+  password: <%= ENV.fetch("PG_PASSWORD") { 'password' } %>
+  host: <%= ENV.fetch("PG_HOST") {'myrailsdb.c5uwo408gfyd.us-east-1.rds.amazonaws.com'} %>
   timeout: 5000
 
 development:
   <<: *default
-  database: shepherds_pie_development
+  database: postgres
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -30,6 +30,9 @@ test:
 production:
   <<: *default
   database: shepherds_pie_production
-  username: <%= ENV['PG_USERNAME'] %>
-  password: <%= ENV['PG_PASSWORD'] %>
-  host: <%= ENV['PG_HOST'] %>
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  host: <%= ENV["PG_HOST"] %>
+  username: <%= ENV["PG_USERNAME"] %>
+  password: <%= ENV["PG_PASSWORD"] %>

@@ -9,7 +9,7 @@
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
 ARG RUBY_VERSION=3.4.1
-FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
+FROM docker.io/library/ruby:3.4.1-slim AS base
 
 # Rails app lives here
 WORKDIR /rails
@@ -20,17 +20,18 @@ RUN apt-get update -qq && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set production environment
-ENV RAILS_ENV="production" \
+ENV RAILS_ENV="development" \
     BUNDLE_DEPLOYMENT="1" \
-    BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+    BUNDLE_PATH="/usr/local/bundle" 
+    
+    
 
 # Throw-away build stage to reduce size of final image
 FROM base AS build
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git pkg-config && \
+    apt-get install --no-install-recommends -y build-essential git pkg-config libpq-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
@@ -48,11 +49,13 @@ RUN bundle exec bootsnap precompile app/ lib/
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
-
-
-
 # Final stage for app image
 FROM base
+
+# Install runtime dependencies
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y libpq5 && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Copy built artifacts: gems, application
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
@@ -62,11 +65,15 @@ COPY --from=build /rails /rails
 RUN groupadd --system --gid 1000 rails && \
     useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
     chown -R rails:rails db log storage tmp
+# Add this to your Dockerfile
+RUN apt-get update -qq && apt-get install -y libpq-dev
+COPY bin/docker-entrypoint /rails/bin/docker-entrypoint
+RUN chmod +x /rails/bin/docker-entrypoint
 USER 1000:1000
-
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
+
 # Start server via Thruster by default, this can be overwritten at runtime
-EXPOSE 80
-CMD ["./bin/thrust", "./bin/rails", "server"]
+EXPOSE 3000
+CMD ["./bin/thrust", "./bin/rails", "server", "-b", "0.0.0.0", "-p", "3000"]

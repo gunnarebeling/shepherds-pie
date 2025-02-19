@@ -25,6 +25,10 @@ Rails.application.configure do
     config.action_controller.perform_caching = false
   end
 
+  Rails.application.configure do
+    # Allow requests from your Elastic Beanstalk domain
+    config.hosts << "shepherds-pie-env.eba-r6yd8dyp.us-east-1.elasticbeanstalk.com"
+  end
   # Change to :null_store to avoid any caching.
   config.cache_store = :memory_store
 

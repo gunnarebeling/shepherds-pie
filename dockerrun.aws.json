@@ -1,0 +1,35 @@
+{
+    "AWSEBDockerrunVersion": "1",
+    "Image": {
+        "Name": "820242923371.dkr.ecr.us-east-1.amazonaws.com/shepherds-pie:latest",
+        "Update": "true"
+    },
+    "Ports": [
+        {
+            "ContainerPort": "3000"
+        }
+    ],
+    "Environment": [
+        {
+            "Name": "RAILS_ENV",
+            "Value": "development"
+        },
+        {
+            "Name": "PG_HOST",
+            "Value": "myrailsdb.c5uwo408gfyd.us-east-1.rds.amazonaws.com"
+        },
+        {
+            "Name": "PG_PORT",
+            "Value": "5432"
+        },
+        {
+            "Name": "PG_USER",
+            "Value": "postgres"
+        },
+        {
+            "Name": "PG_PASSWORD",
+            "Value": "password"
+        }
+        
+    ]
+}

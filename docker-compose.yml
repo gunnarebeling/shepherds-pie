@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${PG_USERNAME}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: shepherds_pie_development
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  web:
+    image: 820242923371.dkr.ecr.us-east-1.amazonaws.com/shepherds-pie:latest
+    command: bash -c "bundle exec rails server -b 0.0.0.0 -p 3000"
+    volumes:
+      - .:/myapp
+    ports:
+      - "3000:3000"
+    environment:
+      RAILS_ENV: development
+      PG_USERNAME: ${PG_USERNAME}
+      PG_PASSWORD: ${PG_PASSWORD}
+      PG_HOST: db  # The database service name is 'db' (from docker-compose.yml)
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+    depends_on:
+      - db  # Make sure the db service starts before the web service
+
+volumes:
+  postgres_data:
+    
